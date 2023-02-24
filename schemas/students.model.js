@@ -9,10 +9,6 @@ const studentsModel = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
   batch: {
     type: String,
     required: true,
@@ -21,6 +17,12 @@ const studentsModel = new mongoose.Schema({
     type: String,
     required: true,
   },
+  mentorDetails: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Mentor",
+    },
+  ],
 });
 
-module.exports = mongoose.model("Students", studentsModel);
+module.exports = mongoose.model("Student", studentsModel);

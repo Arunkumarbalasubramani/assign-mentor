@@ -9,10 +9,7 @@ const mentorModel = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
+  studentsDetails: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
 });
 
-module.exports = mongoose.model("Mentors", mentorModel);
+module.exports = mongoose.model("Mentor", mentorModel);

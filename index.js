@@ -1,12 +1,18 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
+const mongoose = require("mongoose");
 const connection = require("./db/connection");
-
+const StudentsRoute = require("./routes/students.route");
+const MentorsRoute = require("./routes/mentors.route");
+mongoose.set("strictQuery", false);
+const app = express();
 const PORT = 4000;
-app.use(express.json());
 connection();
 
+app.use(express.json());
+
+app.use(StudentsRoute);
+app.use(MentorsRoute);
 app.get("/", (req, res) => {
   res.send("Welcome to Mentor Assigning API");
 });
