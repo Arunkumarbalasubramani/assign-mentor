@@ -21,6 +21,8 @@ router.post("/mentors/add", (req, res) => {
   }
 });
 
+// API to Assign a student to Mentor
+
 router.post("/mentors/:mentor_Id/students", async (req, res) => {
   try {
     // Check if there is such Mentor
@@ -47,4 +49,5 @@ router.post("/mentors/:mentor_Id/students", async (req, res) => {
     res.status(500).send({ Message: `Internal Server Error - ${error}` });
   }
 });
+
 module.exports = router;
