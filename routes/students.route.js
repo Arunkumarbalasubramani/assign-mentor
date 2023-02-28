@@ -33,44 +33,30 @@ router.put("/students/changementor/:studentId", async (req, res) => {
     if (!student) {
       res.status(404).send({ Message: `Student ${studentId} Not found` });
     }
-    const mentorToBeAssigned = req.body.mentorToBeAssigned;
+    const mentorToBeAssigned = req.body;
+
     const mentorDetails = await Mentor.findOne({
-      mentorName: mentorToBeAssigned,
+      mentorName: mentorToBeAssigned.mentorName,
     });
     if (!mentorDetails) {
       res
         .status(404)
         .send({ Message: `Mentor ${mentorToBeAssigned} Not found` });
-    } else {
-      student.mentorDetails = mentorDetails._id;
-      mentorDetails.studentsDetails = student._id;
-      await student.save();
-      await mentorDetails.save();
     }
+    await Mentor.findOneAndUpdate(
+      { _id: student.mentorDetails },
+      { $pull: { studentsDetails: student._id } }
+    );
+    student.mentorDetails = mentorDetails._id;
+    mentorDetails.studentsDetails = student._id;
+    await student.save();
+    await mentorDetails.save();
+    res.status(201).send({
+      Message: `Student ${student.studentName} is assigned with the mentor ${mentorDetails.mentorName} now`,
+    });
   } catch (error) {
     res.status(500).send(`Internal Server Error - ${error}  `);
   }
 });
-
-// router.put("/students/changementor/:studentId", async (req, res) => {
-//   try {
-//     const { studentId } = req.params;
-//     const student = await Student.findById(studentId);
-//     const mentorToBeAssigned = req.body.mentorToBeAssigned;
-//     const mentorDetails = await Mentor.findOne({
-//       mentorName: mentorToBeAssigned,
-//     });
-//     if (!mentorDetails) {
-//       return res.status(404).send(`Mentor ${mentorToBeAssigned} not found`);
-//     }
-//     student.mentor = mentorDetails._id;
-//     await student.save();
-//     res.send(
-//       `Student ${studentId} has been assigned to mentor ${mentorDetails.mentorName}`
-//     );
-//   } catch (error) {
-//     res.status(500).send(`Internal Server Error - ${error}  `);
-//   }
-// });
 
 module.exports = router;

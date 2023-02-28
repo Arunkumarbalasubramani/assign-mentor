@@ -41,13 +41,16 @@ router.post("/mentors/:mentor_Id/students", async (req, res) => {
     // Assign mentor to students and save in database
     data.forEach(async (student) => {
       student.mentorDetails = mentorId;
+      mentor.studentsDetails.push(student._id);
       await student.save();
     });
-
+    await mentor.save();
     res.send(data);
   } catch (error) {
     res.status(500).send({ Message: `Internal Server Error - ${error}` });
   }
 });
+
+//API to show all students for a particular mentor
 
 module.exports = router;
