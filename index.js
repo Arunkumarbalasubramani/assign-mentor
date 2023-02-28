@@ -6,7 +6,7 @@ const StudentsRoute = require("./routes/students.route");
 const MentorsRoute = require("./routes/mentors.route");
 mongoose.set("strictQuery", false);
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 connection();
 
 app.use(express.json());
