@@ -52,5 +52,12 @@ router.post("/mentors/:mentor_Id/students", async (req, res) => {
 });
 
 //API to show all students for a particular mentor
-
+router.get("/mentor", async (req, res) => {
+  const mentor = req.query.name;
+  const data = await Mentor.findOne({ mentorName: mentor }).populate({
+    path: "studentsDetails",
+    select: "studentName studentEmail batch course",
+  });
+  res.send(data);
+});
 module.exports = router;
